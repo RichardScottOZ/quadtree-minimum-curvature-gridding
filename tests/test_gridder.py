@@ -120,6 +120,22 @@ class GridderTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             gridder.grid(0, 3)
 
+    def test_quadtree_export_tiles_root_and_matches_predict(self):
+        gridder = self.make_gridder().fit()
+        cells = gridder.quadtree()
+        n = len(cells["value"])
+        self.assertEqual({len(v) for v in cells.values()}, {n})
+        self.assertEqual(n, len(gridder._collect_leaves()))
+        self.assertEqual(cells["count"].sum(), len(self.x))
+        self.assertAlmostEqual(np.sum(cells["size"] ** 2), gridder.root.size ** 2)
+        centers_x = cells["x0"] + cells["size"] / 2
+        centers_y = cells["y0"] + cells["size"] / 2
+        np.testing.assert_allclose(gridder.predict(centers_x, centers_y), cells["value"])
+
+    def test_quadtree_requires_fit(self):
+        with self.assertRaises(RuntimeError):
+            self.make_gridder().quadtree()
+
 
 if __name__ == "__main__":
     unittest.main()
