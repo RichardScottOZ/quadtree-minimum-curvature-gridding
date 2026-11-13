@@ -192,7 +192,7 @@ class QuadtreeMinCurvatureGridder:
                 np.bincount(b, weights ** 2 / areas[a], minlength=len(leaves)))
             rhs = self.obs_weight * sums
             residual = rhs - apply(values)
-            target = self.tolerance * max(np.linalg.norm(rhs), 1.0)
+            target = self.tolerance * np.linalg.norm(rhs)
             self.converged_ = np.linalg.norm(residual) <= target
             if not self.converged_:
                 preconditioned = residual / diagonal
