@@ -239,3 +239,26 @@ class QuadtreeMinCurvatureGridder:
         gy = np.linspace(self.y.min(), self.y.max(), ny)
         x, y = np.meshgrid(gx, gy)
         return x, y, self.predict(x, y)
+
+    def quadtree(self):
+        """Return the fitted leaf cells as a dict of NumPy arrays.
+
+        Keys are ``x0``, ``y0`` (lower-left corner), ``size`` (edge length),
+        ``level``, ``count`` (observations in the cell) and ``value`` (fitted
+        constant). Cells are sorted by level, then ``y0``, then ``x0``.
+        """
+        if not self._fitted:
+            raise RuntimeError("fit must be called before quadtree")
+        leaves = self._collect_leaves()
+        order = np.lexsort(([leaf.x0 for leaf in leaves],
+                            [leaf.y0 for leaf in leaves],
+                            [leaf.level for leaf in leaves]))
+        leaves = [leaves[i] for i in order]
+        return {
+            "x0": np.array([leaf.x0 for leaf in leaves]),
+            "y0": np.array([leaf.y0 for leaf in leaves]),
+            "size": np.array([leaf.size for leaf in leaves]),
+            "level": np.array([leaf.level for leaf in leaves], dtype=int),
+            "count": np.array([len(leaf.points) for leaf in leaves], dtype=int),
+            "value": np.array([leaf.value for leaf in leaves]),
+        }

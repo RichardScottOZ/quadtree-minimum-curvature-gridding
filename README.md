@@ -36,6 +36,8 @@ Inputs must be nonempty, finite, equal-length one-dimensional arrays. Call
 `fit()` before `predict()` or `grid()`. Query coordinates broadcast as NumPy
 arrays; predictions outside the square root cell or at non-finite coordinates
 are NaN. `grid(nx, ny)` returns arrays of shape `(ny, nx)` spanning the
-observation bounds.
+observation bounds. `quadtree()` (after `fit()`) returns the leaf cells as a
+dict of NumPy arrays (`x0`, `y0`, `size`, `level`, `count`, `value`). See
+[docs/example.md](docs/example.md) for a worked example with plots.
 
 Run tests with `python -m unittest discover -s tests`.
