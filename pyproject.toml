@@ -1,0 +1,15 @@
+[build-system]
+requires=["setuptools>=68","wheel"]
+build-backend="setuptools.build_meta"
+[project]
+name="quadtree-minimum-curvature-gridding"
+version="0.2.0"
+description="Adaptive quadtree minimum-curvature gridding with CRS-aware raster outputs"
+readme="README.md"
+requires-python=">=3.10"
+dependencies=["numpy>=1.26.4","scipy>=1.11"]
+[project.optional-dependencies]
+raster=["xarray>=2024.1","rioxarray>=0.15","rasterio>=1.3","pyproj>=3.6","h5netcdf>=1.3","zarr>=2.17"]
+dev=["pytest>=8","build>=1.2"]
+[tool.setuptools.packages.find]
+where=["src"]
